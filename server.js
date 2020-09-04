@@ -25,6 +25,7 @@ var router = express.Router()
 //GET Requests (Read Our Data)
 router.get('/shares', (req, res) => {
     Share.find()
+    .populate('user')
     .then((share) => {
       res.json(share);
     })
@@ -34,6 +35,18 @@ router.get('/shares/:id', (req, res) => {
 	.then((share) => {
 	    res.json(share)
  	})
+})
+router.post('/shares', (req, res) => {
+    var share = new Share()
+    share.id = Date.now()
+
+    var data = req.body
+
+    Object.assign(share, data)
+    share.save()
+    .then((share) => {
+        res.json(share)
+    })
 })
 router.get('/users', (req, res) => {
     User.find()

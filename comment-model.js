@@ -9,7 +9,23 @@ const CommentSchema = new Schema(
     Comment: String,
     timestamp: String,
   },
-  { timestamps: true }
+  { 
+    timestamps: true 
+  }
 )
+
+CommentSchema.virtual('share', {
+  ref: 'Share',
+  localField: 'share_id',
+  foreignField: 'id',
+  justOne: true
+})
+
+CommentSchema.virtual('user', {
+  ref: 'User',
+  localField: 'user_id',
+  foreignField: 'id',
+  justOne: true
+})
 
 module.exports = mongoose.model('Comment', CommentSchema)

@@ -10,7 +10,17 @@ const ShareSchema = new Schema(
     image: String,
     timestamp: String,
   },
-  { timestamps: true }
+  { 
+    timestamps: true,
+    toJSON: {virtuals: true}
+  }
 )
+
+ShareSchema.virtual('user', {
+  ref: 'User',
+  localField: 'user_id',
+  foreignField: 'id',
+  justOne: true
+})
 
 module.exports = mongoose.model('Share', ShareSchema)
