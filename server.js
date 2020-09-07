@@ -38,6 +38,8 @@ router.get('/shares/:id', (req, res) => {
  	})
 })
 
+//avc
+
 router.post('/shares', (req, res) => {
     var share = new Share()
     share.id = Date.now()
