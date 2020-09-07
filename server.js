@@ -30,12 +30,14 @@ router.get('/shares', (req, res) => {
       res.json(share);
     })
 })
+
 router.get('/shares/:id', (req, res) => {
     Share.findOne({id:req.params.id})
 	.then((share) => {
 	    res.json(share)
  	})
 })
+
 router.post('/shares', (req, res) => {
     var share = new Share()
     share.id = Date.now()
@@ -48,12 +50,27 @@ router.post('/shares', (req, res) => {
         res.json(share)
     })
 })
+
+router.post('/comments', (req, res) => {
+    var comment = new Comment()
+    comment.id = Date.now()
+
+    var data = req.body
+
+    Object.assign(comment, data)
+    comment.save()
+    .then((comment) => {
+        res.json(comment)
+    })
+})
+
 router.get('/users', (req, res) => {
     User.find()
     .then((user) => {
       res.json(user);
     })
 })
+
 router.get('/users/:id', (req, res) => {
     User.findOne({id:req.params.id})
 	.then((user) => {
