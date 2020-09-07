@@ -22,7 +22,7 @@ database.once('open', () => console.log('Connected'))
 database.on('error', () => console.log('Error'))
 var router = express.Router()
 
-//GET Requests (Read Our Data)
+
 router.get('/shares', (req, res) => {
     Share.find()
     .populate('user')
@@ -38,8 +38,6 @@ router.get('/shares/:id', (req, res) => {
  	})
 })
 
-//avc
-
 router.post('/shares', (req, res) => {
     var share = new Share()
     share.id = Date.now()
@@ -53,6 +51,12 @@ router.post('/shares', (req, res) => {
     })
 })
 
+//TODO: Update share
+
+
+
+//TODO: Delete Share
+
 router.post('/comments', (req, res) => {
     var comment = new Comment()
     comment.id = Date.now()
@@ -65,6 +69,13 @@ router.post('/comments', (req, res) => {
         res.json(comment)
     })
 })
+//TODO: COMMENT GET
+
+//TODO: Comment By ID 
+
+//TODO: Update Comments 
+
+//TODO: Delete Comment
 
 router.get('/users', (req, res) => {
     User.find()
@@ -79,6 +90,10 @@ router.get('/users/:id', (req, res) => {
 	    res.json(user)
  	})
 })
+
+//TODO: UPDATE USER
+
+//TODO: DELETE USER 
 
 app.use('/api', router)
 const Port = 4020;
