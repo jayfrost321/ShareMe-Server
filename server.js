@@ -6,7 +6,8 @@ var mongoose = require('mongoose')
 
 var Share = require('./share-model')
 var User = require('./user-model')
-var Comment = require('./user-model')
+var Comment = require('./comment-model')
+const { populate } = require('./share-model')
 
 var app = express()
 app.use(cors())
@@ -57,6 +58,17 @@ router.post('/shares', (req, res) => {
 
 //TODO: Delete Share
 
+
+//TODO: COMMENT GET
+router.get('/comments', (req, res) => {
+    Comment.find()
+    .populate('user')
+    .populate('share')
+    .then((comment) => {
+      res.json(comment);
+    })
+})
+
 router.post('/comments', (req, res) => {
     var comment = new Comment()
     comment.id = Date.now()
@@ -69,13 +81,35 @@ router.post('/comments', (req, res) => {
         res.json(comment)
     })
 })
-//TODO: COMMENT GET
 
 //TODO: Comment By ID 
-
+router.get('/comments/:id', (req, res) => {
+    Comment.findOne({id:req.params.id})
+    .populate('user')
+    .populate('share')
+	.then((comment) => {
+	    res.json(comment)
+ 	})
+})
 //TODO: Update Comments 
-
+router.put('/comments/:id', (req, res) => {
+    Comment.findOne({id:req.params.id})
+    .then((comment) => {
+        var data = req.body
+        Object.assign(comment, data)
+        return comment.save()
+    })
+    .then((comment) => {
+        return res.json(comment)
+    })
+})
 //TODO: Delete Comment
+router.delete('/comments/:id', (req, res) => {
+    Comment.deleteOne({id: req.params.id})
+    .then(() =>  {
+        res.json('deleted')
+    })
+})
 
 router.get('/users', (req, res) => {
     User.find()

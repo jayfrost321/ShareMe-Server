@@ -6,11 +6,12 @@ const CommentSchema = new Schema(
     id: Number,
     user_id: Number,
     share_id: Number,
-    Comment: String,
+    comment: String,
     timestamp: String,
   },
   { 
-    timestamps: true 
+    timestamps: true, 
+    toJSON: {virtuals: true}
   }
 )
 
