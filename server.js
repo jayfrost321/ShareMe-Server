@@ -38,6 +38,7 @@ router.post('/shares', (req, res) => {
 })
 router.get('/shares', (req, res) => {
     Share.find()
+    .sort({'updatedAt': -1})
     .populate('user')
     .then((share) => {
       res.json(share);
