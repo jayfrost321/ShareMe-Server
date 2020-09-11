@@ -11,11 +11,15 @@ const UserSchema = new Schema(
     timestamp: String,
   },
   { 
-    timestamps: true 
+    timestamps: true,
+    toJSON: {virtuals: true}
   }
-
 )
 
-
-
+UserSchema.virtual('shares', {
+  ref: 'Share',
+  localField: 'id',
+  foreignField: 'user_id',
+  justOne: false
+})
 module.exports = mongoose.model('User', UserSchema)

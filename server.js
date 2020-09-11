@@ -58,11 +58,12 @@ router.put('/shares/:id', (req, res) => {
 		Object.assign(share,data)
 		return share.save()	
 	})
-	.then((artist) => {
-		 res.json(artist)
+	.then((share) => {
+		 res.json(share)
 	}) //update existing share data
 
 })
+
 router.delete('/shares/:id', (req, res) => {
 
 	Share.deleteOne({id:req.params.id})
@@ -141,6 +142,7 @@ router.get('/users', (req, res) => {
 })
 router.get('/users/:id', (req, res) => {
     User.findOne({id:req.params.id})
+    .populate('shares')
 	.then((user) => {
 	    res.json(user)
  	}) //read individual user
