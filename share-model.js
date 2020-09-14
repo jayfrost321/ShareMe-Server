@@ -23,4 +23,11 @@ ShareSchema.virtual('user', {
   justOne: true
 })
 
+ShareSchema.virtual('comment', {
+  ref: 'Comment',
+  localField: 'id',
+  foreignField: 'share_id',
+  justOne: false
+})
+
 module.exports = mongoose.model('Share', ShareSchema)

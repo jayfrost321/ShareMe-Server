@@ -46,6 +46,7 @@ router.get('/shares', (req, res) => {
 })
 router.get('/shares/:id', (req, res) => {
     Share.findOne({id:req.params.id})
+    .populate('comment')
 	.then((share) => {
 	    res.json(share)
  	}) //read individual share
