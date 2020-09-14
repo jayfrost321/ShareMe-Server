@@ -44,13 +44,16 @@ router.get('/shares', (req, res) => {
       res.json(share);
     }) //Read all shares
 })
+
 router.get('/shares/:id', (req, res) => {
     Share.findOne({id:req.params.id})
     .populate('comment')
+    .sort({'updatedAt': -1})
 	.then((share) => {
 	    res.json(share)
  	}) //read individual share
 })
+
 router.put('/shares/:id', (req, res) => {
 
 	Share.findOne({id:req.params.id})
