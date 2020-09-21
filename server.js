@@ -47,8 +47,12 @@ router.get('/shares', (req, res) => {
 
 router.get('/shares/:id', (req, res) => {
     Share.findOne({id:req.params.id})
-    .populate('comment')
-    .sort({'updatedAt': -1})
+    // .populate('comments')
+    .populate({ 		
+        path:'comments',	//deep population
+        populate:'user'
+    })
+    .populate('user')
 	.then((share) => {
 	    res.json(share)
  	}) //read individual share
@@ -85,13 +89,16 @@ router.post('/comments', (req, res) => {
     var data = req.body
 
     Object.assign(comment, data)
+    console.log(data)
     comment.save()
     .then((comment) => {
+        console.log(comment)
         res.json(comment)
     }) // Create new comment
 })
 router.get('/comments', (req, res) => {
     Comment.find()
+    .sort({'updatedAt': -1})
     .populate('user')
     .populate('share')
     .then((comment) => {
@@ -171,6 +178,15 @@ router.delete('/users/:id', (req, res) => {
 		res.json('deleted')
 	}) // delete a user
 	
+})
+
+router.post('/users/authenticate', (req, res) => {
+	var {username,password} = req.body;
+    var credential = {username,password}
+	User.findOne(credential)
+	.then((user) => {
+	    return res.json(user)
+	})
 })
 
 //Setup port and routes

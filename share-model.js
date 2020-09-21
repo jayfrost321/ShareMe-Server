@@ -23,7 +23,7 @@ ShareSchema.virtual('user', {
   justOne: true
 })
 
-ShareSchema.virtual('comment', {
+ShareSchema.virtual('comments', {
   ref: 'Comment',
   localField: 'id',
   foreignField: 'share_id',
