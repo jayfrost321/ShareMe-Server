@@ -4,6 +4,7 @@ var bodyParser = require('body-parser')
 var logger = require('morgan')
 var cors = require('cors')
 var mongoose = require('mongoose')
+var fileUpload = require('express-fileupload')
 
 var Share = require('./share-model')
 var User = require('./user-model')
@@ -13,6 +14,7 @@ var app = express()
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(fileUpload())
 app.use(logger('dev'))
 
 var connectionString = 'mongodb://JayFrost:yoobee02@shareme-shard-00-00.unopg.mongodb.net:27017,shareme-shard-00-01.unopg.mongodb.net:27017,shareme-shard-00-02.unopg.mongodb.net:27017/AppDB?ssl=true&replicaSet=atlas-leqoic-shard-0&authSource=admin&retryWrites=true&w=majority'
@@ -21,6 +23,9 @@ mongoose.connect(connectionString,{useNewUrlParser: true})
 var database = mongoose.connection
 database.once('open', () => console.log('Connected'))
 database.on('error', () => console.log('Error'))
+
+app.use(express.static('public'))
+
 var router = express.Router()
 
 //Share C.R.U.D
@@ -190,6 +195,19 @@ router.post('/users/authenticate', (req, res) => {
 	.then((user) => {
 	    return res.json(user)
 	})
+})
+
+router.post('/upload', (req, res) => {
+
+	var files = Object.values(req.files)
+	var uploadedFile = files[0]
+
+	var newName = Date.now() + uploadedFile.name
+
+	uploadedFile.mv('public/'+ newName, function(){
+		res.send(newName)
+	})
+	
 })
 
 //Setup port and routes
