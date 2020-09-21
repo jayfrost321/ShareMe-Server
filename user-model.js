@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { stringify } = require('querystring')
 const Schema = mongoose.Schema
 //test
 const UserSchema = new Schema(
@@ -7,6 +8,7 @@ const UserSchema = new Schema(
     name: String,
     password: String,
     email: String,
+    about_me: String,
     profile_picture: String,
     timestamp: String,
   },

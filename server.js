@@ -40,6 +40,7 @@ router.get('/shares', (req, res) => {
     Share.find()
     .sort({'updatedAt': -1})
     .populate('user')
+    .populate('comments')
     .then((share) => {
       res.json(share);
     }) //Read all shares
@@ -153,14 +154,16 @@ router.get('/users', (req, res) => {
 })
 router.get('/users/:id', (req, res) => {
     User.findOne({id:req.params.id})
-    .populate('shares')
+    .populate({ 		
+        path:'shares',	//deep population
+        populate:'comments'
+    })
 	.then((user) => {
 	    res.json(user)
  	}) //read individual user
 })
 router.put('/users/:id', (req, res) => {
-
-	User.findOne({id:req.params.id})
+    User.findOne({id:req.params.id})
 	.then((user) => {
 		var data = req.body
 		Object.assign(user,data)
