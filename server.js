@@ -189,9 +189,12 @@ router.delete('/users/:id', (req, res) => {
 })
 
 router.post('/users/authenticate', (req, res) => {
-	var {username,password} = req.body;
-    var credential = {username,password}
-	User.findOne(credential)
+	var {email,password} = req.body;
+    // var credential = {username,password}
+
+    console.log(email,password)
+    User.findOne({email})
+    .where('password').equals(password)
 	.then((user) => {
 	    return res.json(user)
 	})
