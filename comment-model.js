@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-//test
+
 const CommentSchema = new Schema(
   {
     id: Number,
@@ -14,19 +14,5 @@ const CommentSchema = new Schema(
     toJSON: {virtuals: true}
   }
 )
-
-CommentSchema.virtual('share', {
-  ref: 'Share',
-  localField: 'share_id',
-  foreignField: 'id',
-  justOne: true
-})
-
-CommentSchema.virtual('user', {
-  ref: 'User',
-  localField: 'user_id',
-  foreignField: 'id',
-  justOne: true
-})
 
 module.exports = mongoose.model('Comment', CommentSchema)

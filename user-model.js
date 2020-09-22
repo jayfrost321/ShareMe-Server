@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-//test
+
 const UserSchema = new Schema(
   {
     id: Number,
@@ -11,15 +11,8 @@ const UserSchema = new Schema(
     timestamp: String,
   },
   { 
-    timestamps: true,
-    toJSON: {virtuals: true}
+    timestamps: true 
   }
 )
 
-UserSchema.virtual('shares', {
-  ref: 'Share',
-  localField: 'id',
-  foreignField: 'user_id',
-  justOne: false
-})
 module.exports = mongoose.model('User', UserSchema)
