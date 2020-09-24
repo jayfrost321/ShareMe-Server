@@ -14,7 +14,6 @@ var app = express()
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
-
 app.use(fileUpload())
 app.use(express.static('public'))
 app.use(logger('dev'))
@@ -27,17 +26,16 @@ database.once('open', () => console.log('Connected'))
 database.on('error', () => console.log('Error'))
 var router = express.Router()
 
-//Share CRUD
+//Shares
 router.post('/shares', (req, res) => {
     var share = new Share()
     share.id = Date.now()
-
     var data = req.body
     Object.assign(share, data)
     share.save()
     .then((share) => {
         res.json(share)
-    }) //create new share to database
+    })
 })
 
 router.get('/shares', (req, res) => {
@@ -46,14 +44,14 @@ router.get('/shares', (req, res) => {
     .populate('user')
     .then((share) => {
       res.json(share);
-    }) //Read all shares
+    })
 })
 
 router.get('/shares/:id', (req, res) => {
     Share.findOne({id:req.params.id})
 	.then((share) => {
 	    res.json(share)
- 	}) //read individual share
+ 	})
 })
 
 router.put('/shares/:id', (req, res) => {
@@ -65,67 +63,17 @@ router.put('/shares/:id', (req, res) => {
 	})
 	.then((artist) => {
 		 res.json(artist)
-	}) //update existing share data
+	}) 
 })
 
 router.delete('/shares/:id', (req, res) => {
 	Share.deleteOne({id:req.params.id})
 	.then(() => {
 		res.json('deleted')
-	}) // delete share
+	})
 })
 
-//Comment CRUD
-router.post('/comments', (req, res) => {
-    var comment = new Comment()
-    comment.id = Date.now()
-    var data = req.body
-
-    Object.assign(comment, data)
-    comment.save()
-    .then((comment) => {
-        res.json(comment)
-    }) // Create new comment
-})
-
-router.get('/comments', (req, res) => {
-    Comment.find()
-    .populate('user')
-    .populate('share')
-    .then((comment) => {
-      res.json(comment);
-    }) // read all comments
-})
-
-router.get('/comments/:id', (req, res) => {
-    Comment.findOne({id:req.params.id})
-    .populate('user')
-    .populate('share')
-	.then((comment) => {
-	    res.json(comment)
- 	}) // read individual comment
-})
-
-router.put('/comments/:id', (req, res) => {
-    Comment.findOne({id:req.params.id})
-    .then((comment) => {
-        var data = req.body
-        Object.assign(comment, data)
-        return comment.save()
-    })
-    .then((comment) => {
-        return res.json(comment)
-    }) // update comment data
-})
-
-router.delete('/comments/:id', (req, res) => {
-    Comment.deleteOne({id: req.params.id})
-    .then(() =>  {
-        res.json('deleted')
-    }) // delete a comment 
-})
-
-//User CRUD
+//Users
 router.post('/users', (req, res) => {
     var user = new User()
     user.id = Date.now()
@@ -135,21 +83,21 @@ router.post('/users', (req, res) => {
     user.save()
     .then((user) => {
             res.json(user)
-        }) // create a new user
+        }) 
 })
 
 router.get('/users', (req, res) => {
     User.find()
     .then((user) => {
       res.json(user);
-    }) //read all users
+    }) 
 })
 
 router.get('/users/:id', (req, res) => {
     User.findOne({id:req.params.id})
 	.then((user) => {
 	    res.json(user)
- 	}) //read individual user
+ 	})
 })
 
 router.put('/users/:id', (req, res) => {
@@ -161,14 +109,14 @@ router.put('/users/:id', (req, res) => {
 	})
 	.then((user) => {
 		 res.json(user)
-	}) //update user details
+	})
 })
 
 router.delete('/users/:id', (req, res) => {
 	User.deleteOne({id:req.params.id})
 	.then(() => {
 		res.json('deleted')
-	}) // delete a user
+	})
 })
 
 /*Upload*/
@@ -185,8 +133,8 @@ router.post('/upload', (req, res) => {
 /*Login Authentication*/
 router.post('/users/authenticate', (req, res) => {
 	var {email,password} = req.body;
-	var credential = {email,password}
-	User.findOne(credential)
+	// var credential = {email,password}
+	User.findOne({email}).where('password').equals(password)
 	.then((user) => {
 	    return res.json(user)
 	})
